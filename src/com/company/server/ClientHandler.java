@@ -2,6 +2,9 @@ package com.company.server;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Date;
+import java.util.Scanner;
+
 
 public class ClientHandler implements Runnable{
 
@@ -13,63 +16,29 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(30000); //wait for 30s before execute the rest of the code
-            //receive data
 
-            InputStream inputStream=client.getInputStream();
-            BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
-            DataOutputStream outputStream= new DataOutputStream(client.getOutputStream());
+            try {
 
-        /*String data= bufferedReader.readLine();
-        System.out.println("Data received from the client"+data);*/
+                InputStream inputStream=client.getInputStream();
+                BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
+                DataOutputStream outputStream= new DataOutputStream(client.getOutputStream());
 
-            //continuous reading data from client
-            String inputData;
-            while((inputData= bufferedReader.readLine())!=null){
-
+                //continuous reading data from client
+                String inputData = bufferedReader.readLine();
                 System.out.println("Client says : "+inputData);
 
-                switch (inputData){
-                    case "Hello from the Client":
-                        outputStream.writeBytes(" Hello from the server..\n");
-                        break;
-                    case "How are you?":
-                        outputStream.writeBytes(" I'm fine, how are you..\n");
-                        break;
-                    case "I'm fine":
-                        outputStream.writeBytes("Ok good to know\n");
-                        break;
-                    case "Thank you":
-                        outputStream.writeBytes("You are welocme \n");
-                        break;
-                    default:
-                        outputStream.writeBytes("I didn't understand it \n");
-                }
+                Scanner servermsg= new Scanner(System.in);
+                System.out.print("Enter a server message: ");
+                String str=servermsg.nextLine();
+                outputStream.writeBytes(str);
 
+               // client.close();
 
+            } catch (IOException e) {
+                e.printStackTrace();
 
-                if(inputData.equals("exit")){
-                    break;
-                }
             }
-
-            //send some data to client
-            //to send data use OutputStream
-
-            //OutputStream outputStream= client.getOutputStream();
-            //DataOutputStream dataOutputStream=new DataOutputStream(outputStream); //wrapper
-
-            /*
-             */
-
-            client.close();
-
-        } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
 
         }
 
-
-    }
 }

@@ -18,7 +18,7 @@ public class Client {
     }
     public void sendMessage(String message) throws IOException {
         System.out.println("Client says: "+message);
-        this.outputStream.writeBytes(message+"\n");
+        this.outputStream.writeBytes(message);
         String dataFromServer= this.bufferedReader.readLine();
         System.out.println("Server says: "+dataFromServer);
     }
